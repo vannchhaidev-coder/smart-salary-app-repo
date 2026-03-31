@@ -1,0 +1,33 @@
+# dependencies
+node_modules
+
+# next build
+.next
+out
+
+# production build
+build
+dist
+
+# logs
+*.log
+
+# environment variables
+.env
+.env.local
+.env.development
+.env.production
+
+# lock files
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+
+# coverage
+coverage
+
+# next cache
+.next/cache
+
+# public assets (optional)
+public
