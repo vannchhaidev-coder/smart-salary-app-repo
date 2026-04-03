@@ -56,6 +56,8 @@ export async function getLoans(page = 0, size = 10): Promise<LoanListResponse> {
     headers,
   });
 
+  console.log("Loan res:", res);
+
   const data = await handleResponse<
     | {
         data: LoanRequest[];
@@ -68,6 +70,8 @@ export async function getLoans(page = 0, size = 10): Promise<LoanListResponse> {
       }
     | LoanRequest[]
   >(res);
+
+  console.log("Loan data:", data);
 
   if (Array.isArray(data)) {
     const normalizedData = data.map(normalizeLoan);

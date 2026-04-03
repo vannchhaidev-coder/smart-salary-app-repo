@@ -21,7 +21,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { useEmployeeLoans } from "@/lib/client";
+import { useEmployeeLoans, useEmployeeTransactions } from "@/lib/client";
 
 function getBadgeVariant(badge: string) {
   switch (badge) {
@@ -45,21 +45,23 @@ export default function EmployeeDashboard() {
   const { data } = useEmployeeLoans(0, 100);
   const loans = data?.data || [];
 
-  // Find matching mock employee ID for filtering mock data
-  // Mock employees use "emp-001" format, real API uses UUIDs and employee codes like "EMP003"
-  const mockEmpId =
-    mockEmployees.find((emp) => emp.employeeId === currentEmployee.employeeId)
-      ?.id || currentEmployee.id;
+  const { data: txnData, isLoading } = useEmployeeTransactions(
+    currentEmployee.id,
+  );
 
   const myLoans = loans.filter((l) => l.employeeId === currentEmployee.id);
   const activeLoans = myLoans.filter(
     (l) => l.status === "approved" || l.status === "repaying",
   );
-  const recentTxns = mockTransactions
-    .filter(
-      (t) => t.employeeId === currentEmployee.id || t.employeeId === mockEmpId,
-    )
-    .slice(0, 5);
+  const recentTxns =
+    txnData?.data
+      ?.map((t) => ({
+        id: t.id,
+        description: t.description,
+        date: t.date ? new Date(t.date).toLocaleDateString() : "",
+        amount: t.type === "DEBIT" ? -t.amount : t.amount,
+      }))
+      .slice(0, 5) || [];
 
   return (
     <div className="flex flex-col gap-6">

@@ -130,12 +130,13 @@ export default function LoanApprovalsPage() {
   const [size] = useState(10);
 
   const { data: loanResponse, isLoading, error } = useLoans(page, size);
-  const updateLoanMutation = useUpdateLoan();
   const approveLoanMutation = useApproveLoan();
   const rejectLoanMutation = useRejectLoan();
   const loans = loanResponse?.data || [];
   const total = loanResponse?.pagination.total || 0;
   const totalPages = loanResponse?.pagination.totalPages || 1;
+
+  console.log("Risk score loan:", loans);
 
   // Fallback to mock data if API fails
   const displayLoans = error
